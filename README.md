@@ -228,13 +228,6 @@ Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICEN
 - Desenvolvedores que contribuíram com melhorias
 - Organizações que promovem inclusão digital
 
-## 📞 Contato
-
-Para dúvidas, sugestões ou feedback sobre acessibilidade:
-
-- **Email**: acessibilidade@hellotinnys.com
-- **Issues**: [GitHub Issues](https://github.com/seu-usuario/hello-tinnys/issues)
-- **Discussões**: [GitHub Discussions](https://github.com/seu-usuario/hello-tinnys/discussions)
 
 ---
 
