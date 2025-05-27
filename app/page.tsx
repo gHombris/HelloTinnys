@@ -10,13 +10,35 @@ import ColorMatchGame from "@/components/games/color-match-game"
 import WordPuzzleGame from "@/components/games/word-puzzle-game"
 import RhythmGame from "@/components/games/rhythm-game"
 
-type Language = "pt" | "en" | "es" | "fr" | "ru"
-type ColorBlindness = "none" | "deuteranopia" | "protanopia" | "tritanopia"
-type FontSize = "small" | "medium" | "large"
-type Theme = "light" | "dark"
-type ActiveTab = "home" | "about" | "characters" | "minigames"
-type ActiveGame = "memory" | "colorMatch" | "wordPuzzle" | "rhythm" | null
+// Definições de tipos TypeScript para garantir type safety e melhor experiência de desenvolvimento
+type Language = "pt" | "en" | "es" | "fr" | "ru" // Idiomas suportados
+type ColorBlindness = "none" | "deuteranopia" | "protanopia" | "tritanopia" // Tipos de daltonismo
+type FontSize = "small" | "medium" | "large" // Tamanhos de fonte disponíveis
+type Theme = "light" | "dark" // Temas visuais
+type ActiveTab = "home" | "about" | "characters" | "minigames" // Abas de navegação
+type ActiveGame = "memory" | "colorMatch" | "wordPuzzle" | "rhythm" | null // Jogos disponíveis
 
+/**
+ * Objeto de traduções multilíngue completo
+ *
+ * Este é o coração do sistema de internacionalização da aplicação.
+ * Características:
+ *
+ * 1. COBERTURA COMPLETA:
+ *    - 5 idiomas: Português, Inglês, Espanhol, Francês e Russo
+ *    - Todas as strings da interface traduzidas
+ *    - Consistência terminológica em cada idioma
+ *
+ * 2. ESTRUTURA HIERÁRQUICA:
+ *    - Organizado por seções (nav, sidebar, home, etc.)
+ *    - Facilita manutenção e adição de novas strings
+ *    - Permite reutilização de traduções
+ *
+ * 3. ACESSIBILIDADE LINGUÍSTICA:
+ *    - Terminologia apropriada para cada cultura
+ *    - Consideração de diferenças regionais
+ *    - Suporte a caracteres especiais (cirílico, acentos)
+ */
 const translations = {
   pt: {
     title: "Hello Tinny's 🎀",
@@ -137,6 +159,7 @@ const translations = {
       features: "Características",
     },
   },
+  // Traduções para outros idiomas seguem a mesma estrutura...
   en: {
     title: "Hello Tinny's 🎀",
     nav: {
@@ -613,61 +636,136 @@ const translations = {
   },
 }
 
+/**
+ * Componente principal da aplicação Hello Tinny's
+ *
+ * Este é o coração da aplicação, implementando um sistema completo de
+ * personalização e acessibilidade. Funcionalidades principais:
+ *
+ * 1. SISTEMA DE PERSONALIZAÇÃO COMPLETO:
+ *    - Múltiplos idiomas com traduções completas
+ *    - Temas claro e escuro
+ *    - Tamanhos de fonte ajustáveis
+ *    - Filtros para diferentes tipos de daltonismo
+ *
+ * 2. NAVEGAÇÃO INTUITIVA:
+ *    - Sistema de abas para diferentes seções
+ *    - Sidebar com controles de personalização
+ *    - Interface responsiva e adaptável
+ *
+ * 3. JOGOS ACESSÍVEIS:
+ *    - 4 minijogos com características de acessibilidade
+ *    - Sistema modal para experiência imersiva
+ *    - Integração com configurações de personalização
+ *
+ * 4. ACESSIBILIDADE AVANÇADA:
+ *    - Suporte completo a leitores de tela
+ *    - Navegação por teclado
+ *    - Filtros visuais para daltonismo
+ *    - Feedback tátil e sonoro
+ */
 export default function Component() {
-  const [language, setLanguage] = useState<Language>("pt")
-  const [theme, setTheme] = useState<Theme>("light")
-  const [fontSize, setFontSize] = useState<FontSize>("medium")
-  const [colorBlindness, setColorBlindness] = useState<ColorBlindness>("none")
-  const [activeTab, setActiveTab] = useState<ActiveTab>("home")
-  const [activeGame, setActiveGame] = useState<ActiveGame>(null)
+  // Estados para controle das preferências do usuário
+  const [language, setLanguage] = useState<Language>("pt") // Idioma atual da interface
+  const [theme, setTheme] = useState<Theme>("light") // Tema visual (claro/escuro)
+  const [fontSize, setFontSize] = useState<FontSize>("medium") // Tamanho da fonte
+  const [colorBlindness, setColorBlindness] = useState<ColorBlindness>("none") // Filtro para daltonismo
+  const [activeTab, setActiveTab] = useState<ActiveTab>("home") // Aba ativa na navegação principal
+  const [activeGame, setActiveGame] = useState<ActiveGame>(null) // Jogo ativo (null = nenhum jogo aberto)
 
+  // Obtém as traduções para o idioma atual
   const t = translations[language]
 
+  /**
+   * Função para aplicar classes CSS baseadas no tamanho da fonte selecionado
+   *
+   * Melhora a acessibilidade para usuários com dificuldades visuais,
+   * permitindo ajustar o tamanho do texto conforme necessário.
+   *
+   * @returns string - Classe CSS do Tailwind para o tamanho de fonte
+   */
   const getFontSizeClass = () => {
     switch (fontSize) {
       case "small":
-        return "text-sm"
+        return "text-sm" // Fonte pequena (14px)
       case "medium":
-        return "text-base"
+        return "text-base" // Fonte média (16px) - padrão
       case "large":
-        return "text-lg"
+        return "text-lg" // Fonte grande (18px)
       default:
         return "text-base"
     }
   }
 
+  /**
+   * Função para aplicar filtros CSS para diferentes tipos de daltonismo
+   *
+   * Utiliza transformações de cor CSS para simular como pessoas com
+   * diferentes tipos de daltonismo percebem as cores, melhorando a
+   * acessibilidade visual.
+   *
+   * @returns string - Classes CSS do Tailwind para filtros de cor
+   */
   const getColorBlindnessFilter = () => {
     switch (colorBlindness) {
-      case "deuteranopia":
+      case "deuteranopia": // Dificuldade em distinguir verde e vermelho
         return "hue-rotate-[240deg] saturate-50"
-      case "protanopia":
+      case "protanopia": // Dificuldade em ver vermelho
         return "hue-rotate-[180deg] saturate-75"
-      case "tritanopia":
+      case "tritanopia": // Dificuldade em ver azul e amarelo
         return "hue-rotate-[60deg] saturate-50"
       default:
         return ""
     }
   }
 
+  // Classes CSS dinâmicas baseadas no tema selecionado
   const themeClasses =
-    theme === "dark" ? "bg-gray-900 text-white" : "bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 text-white"
+    theme === "dark"
+      ? "bg-gray-900 text-white" // Tema escuro: fundo escuro, texto claro
+      : "bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 text-white" // Tema claro: gradiente rosa
 
-  const sidebarClasses = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-pink-400/80 backdrop-blur-sm"
+  const sidebarClasses =
+    theme === "dark"
+      ? "bg-gray-800 border-gray-700" // Sidebar escura
+      : "bg-pink-400/80 backdrop-blur-sm" // Sidebar clara com transparência
 
   const cardClasses =
-    theme === "dark" ? "bg-gray-700 border-gray-600 text-white" : "bg-pink-300/60 backdrop-blur-sm border-pink-200"
+    theme === "dark"
+      ? "bg-gray-700 border-gray-600 text-white" // Cards escuros
+      : "bg-pink-300/60 backdrop-blur-sm border-pink-200" // Cards claros com transparência
 
+  /**
+   * Função para abrir um jogo específico em modal
+   *
+   * @param gameType - Tipo do jogo a ser aberto (ou null para fechar)
+   */
   const openGame = (gameType: ActiveGame) => {
     setActiveGame(gameType)
   }
 
+  /**
+   * Função para fechar o jogo ativo
+   */
   const closeGame = () => {
     setActiveGame(null)
   }
 
+  /**
+   * Função que renderiza o conteúdo principal baseado na aba ativa
+   *
+   * Cada seção tem seu próprio layout e funcionalidades específicas:
+   * - Home: Informações sobre personalização
+   * - About: Missão, valores e equipe
+   * - Characters: Personagens e suas funções
+   * - Minigames: Jogos disponíveis com suas características
+   *
+   * @returns JSX.Element - Conteúdo da aba ativa
+   */
   const renderContent = () => {
     switch (activeTab) {
       case "home":
+        // Página inicial com informações sobre personalização
         return (
           <Card className={`max-w-4xl mx-auto p-8 rounded-3xl ${cardClasses}`}>
             <h1 className="text-3xl font-bold text-center mb-8">{t.home.title}</h1>
@@ -676,12 +774,15 @@ export default function Component() {
         )
 
       case "about":
+        // Página sobre o projeto com missão, valores e equipe
         return (
           <div className="max-w-4xl mx-auto space-y-8">
+            {/* Card principal com missão e equipe */}
             <Card className={`p-8 rounded-3xl ${cardClasses}`}>
               <h1 className="text-3xl font-bold text-center mb-4">{t.about.title}</h1>
               <p className="text-lg text-center mb-8 opacity-90">{t.about.subtitle}</p>
 
+              {/* Grid com missão e equipe lado a lado */}
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -701,11 +802,13 @@ export default function Component() {
               </div>
             </Card>
 
+            {/* Card separado com valores da empresa */}
             <Card className={`p-8 rounded-3xl ${cardClasses}`}>
               <div className="flex items-center gap-2 mb-6">
                 <Star className="w-6 h-6" />
                 <h2 className="text-2xl font-bold">{t.about.values}</h2>
               </div>
+              {/* Grid responsivo com os valores */}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {t.about.valuesList.map((value, index) => (
                   <div key={index} className="flex items-center gap-2 p-3 rounded-lg bg-white/10">
@@ -719,6 +822,7 @@ export default function Component() {
         )
 
       case "characters":
+        // Página dos personagens com suas descrições e funções
         const characters = [
           { key: "tinny", icon: "🎀", color: "bg-pink-500" },
           { key: "luna", icon: "🌙", color: "bg-purple-500" },
@@ -728,17 +832,20 @@ export default function Component() {
 
         return (
           <div className="max-w-6xl mx-auto space-y-8">
+            {/* Header da seção */}
             <Card className={`p-8 rounded-3xl ${cardClasses} text-center`}>
               <h1 className="text-3xl font-bold mb-4">{t.characters.title}</h1>
               <p className="text-lg opacity-90">{t.characters.subtitle}</p>
             </Card>
 
+            {/* Grid de personagens */}
             <div className="grid md:grid-cols-2 gap-6">
               {characters.map((char) => {
                 const charData = t.characters[char.key as keyof typeof t.characters] as any
                 return (
                   <Card key={char.key} className={`p-6 rounded-3xl ${cardClasses}`}>
                     <div className="flex items-start gap-4">
+                      {/* Avatar do personagem */}
                       <div className={`w-16 h-16 rounded-full ${char.color} flex items-center justify-center text-2xl`}>
                         {char.icon}
                       </div>
@@ -758,6 +865,7 @@ export default function Component() {
         )
 
       case "minigames":
+        // Página dos minijogos com suas características e botões para jogar
         const games = [
           { key: "memoryGame", icon: "🧠", difficulty: "easy", gameType: "memory" as ActiveGame },
           { key: "colorMatch", icon: "🎨", difficulty: "medium", gameType: "colorMatch" as ActiveGame },
@@ -765,14 +873,19 @@ export default function Component() {
           { key: "rhythmGame", icon: "🎵", difficulty: "hard", gameType: "rhythm" as ActiveGame },
         ]
 
+        /**
+         * Função para determinar a cor do badge de dificuldade
+         * @param difficulty - Nível de dificuldade do jogo
+         * @returns string - Classe CSS para a cor do badge
+         */
         const getDifficultyColor = (difficulty: string) => {
           switch (difficulty) {
             case "easy":
-              return "bg-green-500"
+              return "bg-green-500" // Verde para fácil
             case "medium":
-              return "bg-yellow-500"
+              return "bg-yellow-500" // Amarelo para médio
             case "hard":
-              return "bg-red-500"
+              return "bg-red-500" // Vermelho para difícil
             default:
               return "bg-gray-500"
           }
@@ -780,17 +893,20 @@ export default function Component() {
 
         return (
           <div className="max-w-6xl mx-auto space-y-8">
+            {/* Header da seção */}
             <Card className={`p-8 rounded-3xl ${cardClasses} text-center`}>
               <h1 className="text-3xl font-bold mb-4">{t.minigames.title}</h1>
               <p className="text-lg opacity-90">{t.minigames.subtitle}</p>
             </Card>
 
+            {/* Grid de jogos */}
             <div className="grid md:grid-cols-2 gap-6">
               {games.map((game) => {
                 const gameData = t.minigames[game.key as keyof typeof t.minigames] as any
                 return (
                   <Card key={game.key} className={`p-6 rounded-3xl ${cardClasses}`}>
                     <div className="flex items-start gap-4 mb-4">
+                      {/* Ícone do jogo */}
                       <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl">
                         {game.icon}
                       </div>
@@ -806,6 +922,7 @@ export default function Component() {
                       </div>
                     </div>
 
+                    {/* Lista de características do jogo */}
                     <div className="mb-4">
                       <h4 className="font-semibold mb-2 flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
@@ -820,6 +937,7 @@ export default function Component() {
                       </div>
                     </div>
 
+                    {/* Botão para iniciar o jogo */}
                     <Button
                       className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30"
                       onClick={() => openGame(game.gameType)}
@@ -841,9 +959,10 @@ export default function Component() {
 
   return (
     <div className={`min-h-screen ${themeClasses} ${getColorBlindnessFilter()} ${getFontSizeClass()}`}>
-      {/* Header */}
+      {/* Header com navegação principal */}
       <header className="h-16 flex items-center justify-between px-6 border-b border-white/20">
         <h1 className="text-2xl font-bold">{t.title}</h1>
+        {/* Navegação por abas */}
         <nav className="flex gap-4">
           {Object.entries(t.nav).map(([key, label]) => (
             <Button
@@ -861,11 +980,11 @@ export default function Component() {
       </header>
 
       <div className="flex">
-        {/* Sidebar */}
+        {/* Sidebar com opções de personalização */}
         <aside className={`w-80 min-h-[calc(100vh-4rem)] p-6 ${sidebarClasses} border-r border-white/20`}>
           <h2 className="text-xl font-bold mb-6">{t.sidebar.personalization}</h2>
 
-          {/* Font Size */}
+          {/* Seção de tamanho da fonte */}
           <div className="mb-8">
             <h3 className="font-semibold mb-3">{t.sidebar.fontSize}</h3>
             <div className="space-y-2">
@@ -884,7 +1003,7 @@ export default function Component() {
             </div>
           </div>
 
-          {/* Color Blindness */}
+          {/* Seção de filtros para daltonismo */}
           <div className="mb-8">
             <h3 className="font-semibold mb-3">{t.sidebar.colorblind}</h3>
             <div className="space-y-2">
@@ -912,7 +1031,7 @@ export default function Component() {
             </div>
           </div>
 
-          {/* Languages */}
+          {/* Seção de seleção de idioma */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-3">
               <Globe className="w-4 h-4" />
@@ -934,7 +1053,7 @@ export default function Component() {
             </div>
           </div>
 
-          {/* Theme Toggle */}
+          {/* Toggle de tema claro/escuro */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               {theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
@@ -953,11 +1072,11 @@ export default function Component() {
           </div>
         </aside>
 
-        {/* Main Content */}
+        {/* Área de conteúdo principal */}
         <main className="flex-1 p-8">{renderContent()}</main>
       </div>
 
-      {/* Game Modals */}
+      {/* Modais dos jogos - renderizados condicionalmente */}
       {activeGame === "memory" && (
         <MemoryGame language={language} theme={theme} colorBlindness={colorBlindness} onClose={closeGame} />
       )}
